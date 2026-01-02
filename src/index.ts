@@ -9,6 +9,7 @@ yargs(hideBin(process.argv))
     () => {},
     () => {
       console.log(currentText);
+      process.exitCode = 1;
     },
   )
   .command(
