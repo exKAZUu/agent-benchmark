@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { calculate } from "../src/cli";
+import { calculate, currentText } from "../src/cli";
 
 describe("calculate", () => {
   test("adds", () => {
@@ -16,5 +16,11 @@ describe("calculate", () => {
 
   test("divides", () => {
     expect(calculate(12, "/", 3)).toBe(4);
+  });
+});
+
+describe("currentText", () => {
+  test("uses the hello world message", () => {
+    expect(currentText).toBe("Hello, World!");
   });
 });
