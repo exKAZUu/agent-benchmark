@@ -1,5 +1,3 @@
-export const currentText = "Hello, World!";
-
 export type Operator = "+" | "-" | "*" | "/";
 
 export function calculate(left: number, operator: Operator, right: number): number {
