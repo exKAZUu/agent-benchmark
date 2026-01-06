@@ -1,6 +1,6 @@
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import { calculate, currentText } from "./cli";
+import { calculate } from "./cli";
 
 yargs(hideBin(process.argv))
   .command(
@@ -8,7 +8,7 @@ yargs(hideBin(process.argv))
     "Print the current text",
     () => {},
     () => {
-      console.log(currentText);
+      console.log("Hello, World!");
     },
   )
   .command(
