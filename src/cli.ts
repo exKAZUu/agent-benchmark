@@ -2,6 +2,10 @@ export const currentText = "Hello, World!";
 
 export type Operator = "+" | "-" | "*" | "/";
 
+function assertUnreachable(value: never): never {
+  throw new Error(`Unsupported operator: ${value}`);
+}
+
 export function calculate(left: number, operator: Operator, right: number): number {
   switch (operator) {
     case "+":
@@ -12,5 +16,7 @@ export function calculate(left: number, operator: Operator, right: number): numb
       return left * right;
     case "/":
       return left / right;
+    default:
+      return assertUnreachable(operator);
   }
 }
