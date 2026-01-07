@@ -17,4 +17,17 @@ describe("calculate", () => {
   test("divides", () => {
     expect(calculate(12, "/", 3)).toBe(4);
   });
+
+  test("modulo remainder", () => {
+    expect(calculate(10, "%", 3)).toBe(1);
+  });
+
+  test("modulo floats and negatives", () => {
+    expect(calculate(5.5, "%", 2)).toBe(1.5);
+    expect(calculate(-5, "%", 2)).toBe(-1);
+  });
+
+  test("modulo by zero returns NaN", () => {
+    expect(Number.isNaN(calculate(1, "%", 0))).toBe(true);
+  });
 });
