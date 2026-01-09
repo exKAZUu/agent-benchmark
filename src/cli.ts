@@ -13,6 +13,6 @@ export function calculate(left: number, operator: Operator, right: number): numb
     case "/":
       return left / right;
     case "%":
-      return left % right;
+      return ((left % right) + right) % right;
   }
 }
