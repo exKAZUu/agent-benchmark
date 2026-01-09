@@ -14,5 +14,7 @@ export function calculate(left: number, operator: Operator, right: number): numb
       return left / right;
     case "%":
       return left % right;
+    default:
+      throw new Error(`Unknown operator: ${operator}`);
   }
 }
