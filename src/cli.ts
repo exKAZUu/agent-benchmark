@@ -14,5 +14,9 @@ export function calculate(left: number, operator: Operator, right: number): numb
       return left / right;
     case "%":
       return left % right;
+    default: {
+      const unsupported: never = operator;
+      throw new Error(`Unsupported operator: ${unsupported}`);
+    }
   }
 }
