@@ -1,6 +1,6 @@
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import { calculate, currentText, Operator, OPERATORS } from "./cli";
+import { calculate, currentText, type Operator, OPERATORS } from "./cli";
 
 yargs(hideBin(process.argv))
   .command(
