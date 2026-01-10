@@ -1,7 +1,0 @@
-[
-  {
-    "path": "src/index.ts",
-    "line": 3,
-    "body": "'Operator' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled."
-  }
-]
