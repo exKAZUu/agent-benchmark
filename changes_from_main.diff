@@ -1,0 +1,81 @@
+diff --git a/src/cli.ts b/src/cli.ts
+index 14a6925..aafe10e 100644
+--- a/src/cli.ts
++++ b/src/cli.ts
+@@ -1,6 +1,8 @@
+ export const currentText = "Hello via Bun!";
+ 
+-export type Operator = "+" | "-" | "*" | "/";
++export const OPERATORS = ["+", "-", "*", "/", "%"] as const;
++
++export type Operator = typeof OPERATORS[number];
+ 
+ export function calculate(left: number, operator: Operator, right: number): number {
+   switch (operator) {
+@@ -12,5 +14,7 @@ export function calculate(left: number, operator: Operator, right: number): numb
+       return left * right;
+     case "/":
+       return left / right;
++    case "%":
++      return left % right;
+   }
+ }
+diff --git a/src/index.ts b/src/index.ts
+index dd12cd6..0668e1a 100644
+--- a/src/index.ts
++++ b/src/index.ts
+@@ -1,6 +1,6 @@
+ import yargs from "yargs";
+ import { hideBin } from "yargs/helpers";
+-import { calculate, currentText } from "./cli";
++import { calculate, currentText, Operator, OPERATORS } from "./cli";
+ 
+ yargs(hideBin(process.argv))
+   .command(
+@@ -22,7 +22,7 @@ yargs(hideBin(process.argv))
+         })
+         .positional("operator", {
+           type: "string",
+-          choices: ["+", "-", "*", "/"] as const,
++          choices: OPERATORS,
+           demandOption: true,
+         })
+         .positional("right", {
+@@ -32,7 +32,7 @@ yargs(hideBin(process.argv))
+     (argv) => {
+       const left = argv.left as number;
+       const right = argv.right as number;
+-      const operator = argv.operator as "+" | "-" | "*" | "/";
++      const operator = argv.operator as Operator;
+ 
+       console.log(calculate(left, operator, right));
+     },
+diff --git a/tests/e2e.test.ts b/tests/e2e.test.ts
+index cde7ffd..c639700 100644
+--- a/tests/e2e.test.ts
++++ b/tests/e2e.test.ts
+@@ -37,4 +37,11 @@ describe("cli", () => {
+     expect(result.stderr).toBe("");
+     expect(result.stdout).toBe("5");
+   });
++
++  test("calc modulo", async () => {
++    const result = await runCli(["calc", "10", "%", "3"]);
++    expect(result.exitCode).toBe(0);
++    expect(result.stderr).toBe("");
++    expect(result.stdout).toBe("1");
++  });
+ });
+diff --git a/tests/unit.test.ts b/tests/unit.test.ts
+index aa85cb0..6e63c5f 100644
+--- a/tests/unit.test.ts
++++ b/tests/unit.test.ts
+@@ -17,4 +17,8 @@ describe("calculate", () => {
+   test("divides", () => {
+     expect(calculate(12, "/", 3)).toBe(4);
+   });
++
++  test("modulo", () => {
++    expect(calculate(10, "%", 3)).toBe(1);
++  });
+ });
