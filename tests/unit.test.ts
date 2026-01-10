@@ -20,6 +20,6 @@ describe("calculate", () => {
 
   test("modulo", () => {
     expect(calculate(10, "%", 3)).toBe(1);
-    expect(calculate(10, "%", 5)).toBe(0);
+    expect(calculate(10, "%", 5)).toBe(0); // Added unit tests for the modulo operator.
   });
 });

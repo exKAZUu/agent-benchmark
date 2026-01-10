@@ -12,7 +12,7 @@ export function calculate(left: number, operator: Operator, right: number): numb
       return left * right;
     case "/":
       return left / right;
-    case "%":
+    case "%": // Implementation of the modulo operator.
       return left % right;
   }
 }

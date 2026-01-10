@@ -22,7 +22,7 @@ yargs(hideBin(process.argv))
         })
         .positional("operator", {
           type: "string",
-          choices: ["+", "-", "*", "/", "%"] as const,
+          choices: ["+", "-", "*", "/", "%"] as const, // Added '%' to the list of allowed choices.
           demandOption: true,
         })
         .positional("right", {
