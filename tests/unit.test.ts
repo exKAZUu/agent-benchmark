@@ -21,4 +21,8 @@ describe("calculate", () => {
   test("modulo", () => {
     expect(calculate(10, "%", 3)).toBe(1);
   });
+
+  test("modulo by zero", () => {
+    expect(calculate(10, "%", 0)).toBeNaN();
+  });
 });

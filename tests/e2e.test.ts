@@ -44,4 +44,11 @@ describe("cli", () => {
     expect(result.stderr).toBe("");
     expect(result.stdout).toBe("1");
   });
+
+  test("calc modulo by zero", async () => {
+    const result = await runCli(["calc", "10", "%", "0"]);
+    expect(result.exitCode).toBe(0);
+    expect(result.stderr).toBe("");
+    expect(result.stdout).toBe("NaN");
+  });
 });
