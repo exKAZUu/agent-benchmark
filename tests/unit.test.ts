@@ -17,4 +17,16 @@ describe("calculate", () => {
   test("divides", () => {
     expect(calculate(12, "/", 3)).toBe(4);
   });
+
+  test("calculates modulo", () => {
+    expect(calculate(10, "%", 3)).toBe(1);
+  });
+
+  test("calculates modulo with zero remainder", () => {
+    expect(calculate(12, "%", 4)).toBe(0);
+  });
+
+  test("calculates modulo with negative numbers", () => {
+    expect(calculate(-10, "%", 3)).toBe(-1);
+  });
 });
