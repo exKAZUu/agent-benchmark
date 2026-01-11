@@ -1,6 +1,7 @@
 export const currentText = "Hello via Bun!";
 
-export type Operator = "+" | "-" | "*" | "/" | "%";
+export const OPERATORS = ["+", "-", "*", "/", "%"] as const;
+export type Operator = typeof OPERATORS[number];
 
 export function calculate(left: number, operator: Operator, right: number): number {
   switch (operator) {
