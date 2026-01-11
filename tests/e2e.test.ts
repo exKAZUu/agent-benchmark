@@ -44,4 +44,11 @@ describe("cli", () => {
     expect(result.stderr).toBe("");
     expect(result.stdout).toBe("1");
   });
+
+  test("calc supports negative numbers", async () => {
+    const result = await runCli(["calc", "-10", "%", "3"]);
+    expect(result.exitCode).toBe(0);
+    expect(result.stderr).toBe("");
+    expect(result.stdout).toBe("-1");
+  });
 });
