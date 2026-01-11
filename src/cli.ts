@@ -15,8 +15,8 @@ export function calculate(left: number, operator: Operator, right: number): numb
     case "%":
       return left % right;
     default: {
-      const _exhaustiveCheck: never = operator;
-      throw new Error(`Unhandled operator: ${_exhaustiveCheck}`);
+      const exhaustiveCheck: never = operator;
+      throw new Error(`Unhandled operator: ${exhaustiveCheck}`);
     }
   }
 }
