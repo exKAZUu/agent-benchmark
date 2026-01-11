@@ -18,7 +18,7 @@ describe("calculate", () => {
     expect(calculate(12, "/", 3)).toBe(4);
   });
 
-  test("modulos", () => {
+  test("modulo", () => {
     expect(calculate(10, "%", 3)).toBe(1);
   });
 });
