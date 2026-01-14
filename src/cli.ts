@@ -1,6 +1,6 @@
 export const currentText = "Hello via Bun!";
 
-export type Operator = "+" | "-" | "*" | "/";
+export type Operator = "+" | "-" | "*" | "/" | "%";
 
 export function calculate(left: number, operator: Operator, right: number): number {
   switch (operator) {
@@ -12,5 +12,9 @@ export function calculate(left: number, operator: Operator, right: number): numb
       return left * right;
     case "/":
       return left / right;
+    case "%":
+      return left % right;
+    default:
+      throw new Error(`Unsupported operator: ${operator}`);
   }
 }
