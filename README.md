@@ -12,4 +12,12 @@ To run:
 bun run src/index.ts
 ```
 
+Calculator supports operators: `+`, `-`, `*`, `/`, `%`.
+
+Example:
+
+```bash
+bun run src/index.ts calc 10 % 4
+```
+
 This project was created using `bun init` in bun v1.3.5. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
