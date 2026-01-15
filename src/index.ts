@@ -1,43 +1,34 @@
-import yargs from "yargs";
-import { hideBin } from "yargs/helpers";
+import { Command, Argument } from "commander";
 import { calculate, currentText } from "./cli";
 
-yargs(hideBin(process.argv))
-  .command(
-    "hello",
-    "Print the current text",
-    () => {},
-    () => {
-      console.log(currentText);
-    },
-  )
-  .command(
-    "calc <left> <operator> <right>",
-    "Calculate a result from two numbers and an operator",
-    (cmd) =>
-      cmd
-        .positional("left", {
-          type: "number",
-          demandOption: true,
-        })
-        .positional("operator", {
-          type: "string",
-          choices: ["+", "-", "*", "/"] as const,
-          demandOption: true,
-        })
-        .positional("right", {
-          type: "number",
-          demandOption: true,
-        }),
-    (argv) => {
-      const left = argv.left as number;
-      const right = argv.right as number;
-      const operator = argv.operator as "+" | "-" | "*" | "/";
+const program = new Command();
 
-      console.log(calculate(left, operator, right));
-    },
+program
+  .command("hello")
+  .description("Print the current text")
+  .action(() => {
+    console.log(currentText);
+  });
+
+program
+  .command("calc")
+  .description("Calculate a result from two numbers and an operator")
+  // Define arguments
+  .addArgument(new Argument("<left>", "Left number").argParser(parseFloat))
+  .addArgument(
+    new Argument("<operator>", "Operator").choices(["+", "-", "*", "/"])
   )
-  .demandCommand(1)
-  .strict()
-  .help()
-  .parse();
+  .addArgument(new Argument("<right>", "Right number").argParser(parseFloat))
+  .action((left, operator, right) => {
+    // 'left' and 'right' are parsed as numbers by argParser
+    // 'operator' is validated by choices
+    console.log(calculate(left, operator, right));
+  });
+
+// strict() is default in commander for unknown options/commands usually.
+program.parse(process.argv);
+
+// Optional: Mimic .demandCommand(1) behavior if needed (not explicitly required by tests but good practice)
+if (process.argv.length < 3) {
+  program.help();
+}
