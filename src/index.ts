@@ -1,43 +1,31 @@
-import yargs from "yargs";
-import { hideBin } from "yargs/helpers";
+import { Command } from "commander";
 import { calculate, currentText } from "./cli";
 
-yargs(hideBin(process.argv))
-  .command(
-    "hello",
-    "Print the current text",
-    () => {},
-    () => {
-      console.log(currentText);
-    },
-  )
-  .command(
-    "calc <left> <operator> <right>",
-    "Calculate a result from two numbers and an operator",
-    (cmd) =>
-      cmd
-        .positional("left", {
-          type: "number",
-          demandOption: true,
-        })
-        .positional("operator", {
-          type: "string",
-          choices: ["+", "-", "*", "/"] as const,
-          demandOption: true,
-        })
-        .positional("right", {
-          type: "number",
-          demandOption: true,
-        }),
-    (argv) => {
-      const left = argv.left as number;
-      const right = argv.right as number;
-      const operator = argv.operator as "+" | "-" | "*" | "/";
+const program = new Command();
 
-      console.log(calculate(left, operator, right));
-    },
-  )
-  .demandCommand(1)
-  .strict()
-  .help()
-  .parse();
+program
+  .command("hello")
+  .description("Print the current text")
+  .action(() => {
+    console.log(currentText);
+  });
+
+function parseOperator(value: string) {
+  const choices = ["+", "-", "*", "/"];
+  if (!choices.includes(value)) {
+    throw new Error(`Allowed choices are ${choices.join(", ")}.`);
+  }
+  return value;
+}
+
+program
+  .command("calc")
+  .description("Calculate a result from two numbers and an operator")
+  .argument("<left>", "Left operand", parseFloat)
+  .argument("<operator>", "Operator", parseOperator)
+  .argument("<right>", "Right operand", parseFloat)
+  .action((left, operator, right) => {
+    console.log(calculate(left, operator as any, right));
+  });
+
+program.parse(process.argv);
