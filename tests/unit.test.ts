@@ -17,4 +17,12 @@ describe("calculate", () => {
   test("divides", () => {
     expect(calculate(12, "/", 3)).toBe(4);
   });
+
+  test("modulos", () => {
+    expect(calculate(5, "%", 2)).toBe(1);
+  });
+
+  test("modulos with negative dividend (JS remainder semantics)", () => {
+    expect(calculate(-5, "%", 2)).toBe(-1);
+  });
 });
