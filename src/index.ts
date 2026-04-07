@@ -1,6 +1,5 @@
 import { Command } from "commander";
-import { calculate, currentText } from "./cli";
-import type { Operator } from "./cli";
+import { calculate, currentText, type Operator } from "./cli";
 
 const program = new Command();
 
