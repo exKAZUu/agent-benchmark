@@ -17,8 +17,8 @@ async function runCli(args: string[]) {
   ]);
 
   return {
-    stdout: stdout.trim(),
-    stderr: stderr.trim(),
+    stdout,
+    stderr,
     exitCode,
   };
 }
@@ -28,13 +28,13 @@ describe("cli", () => {
     const result = await runCli(["hello"]);
     expect(result.exitCode).toBe(0);
     expect(result.stderr).toBe("");
-    expect(result.stdout).toBe("Hello, World!");
+    expect(result.stdout).toBe("Hello, World!\n");
   });
 
   test("calc prints only the number result", async () => {
     const result = await runCli(["calc", "2", "+", "3"]);
     expect(result.exitCode).toBe(0);
     expect(result.stderr).toBe("");
-    expect(result.stdout).toBe("5");
+    expect(result.stdout).toBe("5\n");
   });
 });
