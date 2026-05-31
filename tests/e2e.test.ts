@@ -37,4 +37,35 @@ describe("cli", () => {
     expect(result.stderr).toBe("");
     expect(result.stdout).toBe("5");
   });
+
+  test("no arguments prints help and exits with 1", async () => {
+    const result = await runCli([]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("Usage:");
+    expect(result.stderr).toContain("Commands:");
+  });
+
+  test("unknown command prints error and exits with 1", async () => {
+    const result = await runCli(["unknown"]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("error: unknown command");
+  });
+
+  test("calc with missing arguments exits with 1", async () => {
+    const result = await runCli(["calc", "2", "+"]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("error: missing required argument");
+  });
+
+  test("calc with invalid operand exits with 1", async () => {
+    const result = await runCli(["calc", "foo", "+", "3"]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("must be a number");
+  });
+
+  test("calc with invalid operator exits with 1", async () => {
+    const result = await runCli(["calc", "2", "foo", "3"]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("Allowed choices are");
+  });
 });
