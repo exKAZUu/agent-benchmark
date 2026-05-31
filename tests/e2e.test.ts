@@ -24,11 +24,11 @@ async function runCli(args: string[]) {
 }
 
 describe("cli", () => {
-  test("hello prints the current text", async () => {
+  test("hello prints Hello, World!", async () => {
     const result = await runCli(["hello"]);
     expect(result.exitCode).toBe(0);
     expect(result.stderr).toBe("");
-    expect(result.stdout).toBe("Hello via Bun!");
+    expect(result.stdout).toBe("Hello, World!");
   });
 
   test("calc prints only the number result", async () => {
@@ -36,5 +36,12 @@ describe("cli", () => {
     expect(result.exitCode).toBe(0);
     expect(result.stderr).toBe("");
     expect(result.stdout).toBe("5");
+  });
+
+  test("calc supports modulo", async () => {
+    const result = await runCli(["calc", "10", "%", "4"]);
+    expect(result.exitCode).toBe(0);
+    expect(result.stderr).toBe("");
+    expect(result.stdout).toBe("2");
   });
 });

@@ -1,4 +1,5 @@
 .idea/copilot.*
+.antigravitycli/
 
 # Created by https://www.toptal.com/developers/gitignore/api/node,intellij,macos
 # Edit at https://www.toptal.com/developers/gitignore?templates=node,intellij,macos
