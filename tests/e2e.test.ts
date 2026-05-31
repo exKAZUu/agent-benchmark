@@ -4,8 +4,8 @@ import { dirname, join } from "path";
 
 const entry = join(dirname(fileURLToPath(import.meta.url)), "..", "src", "index.ts");
 
-async function runCli(args: string[]) {
-  const proc = Bun.spawn(["bun", "run", entry, ...args], {
+async function runCli(command: string[]) {
+  const proc = Bun.spawn(command, {
     stdout: "pipe",
     stderr: "pipe",
   });
@@ -25,14 +25,21 @@ async function runCli(args: string[]) {
 
 describe("cli", () => {
   test("hello prints Hello, World!", async () => {
-    const result = await runCli(["hello"]);
+    const result = await runCli(["bun", "run", entry, "hello"]);
+    expect(result.exitCode).toBe(0);
+    expect(result.stderr).toBe("");
+    expect(result.stdout).toBe("Hello, World!\n");
+  });
+
+  test("package entrypoint hello prints Hello, World!", async () => {
+    const result = await runCli(["bun", "run", ".", "hello"]);
     expect(result.exitCode).toBe(0);
     expect(result.stderr).toBe("");
     expect(result.stdout).toBe("Hello, World!\n");
   });
 
   test("calc prints only the number result", async () => {
-    const result = await runCli(["calc", "2", "+", "3"]);
+    const result = await runCli(["bun", "run", entry, "calc", "2", "+", "3"]);
     expect(result.exitCode).toBe(0);
     expect(result.stderr).toBe("");
     expect(result.stdout).toBe("5\n");
