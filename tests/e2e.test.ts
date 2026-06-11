@@ -37,4 +37,36 @@ describe("cli", () => {
     expect(result.stderr).toBe("");
     expect(result.stdout).toBe("5");
   });
+
+  test("calc supports modulo", async () => {
+    const result = await runCli(["calc", "14", "%", "5"]);
+    expect(result.exitCode).toBe(0);
+    expect(result.stderr).toBe("");
+    expect(result.stdout).toBe("4");
+  });
+
+  test("requires a command", async () => {
+    const result = await runCli([]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stdout).toBe("");
+    expect(result.stderr).toContain("Usage: agent-benchmark");
+    expect(result.stderr).toContain("hello");
+    expect(result.stderr).toContain("calc");
+  });
+
+  test("rejects unsupported operators", async () => {
+    const result = await runCli(["calc", "2", "^", "3"]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stdout).toBe("");
+    expect(result.stderr).toContain("command-argument value '^' is invalid");
+    expect(result.stderr).toContain("Operator must be one of: +, -, *, /, %");
+  });
+
+  test("rejects non-numeric operands", async () => {
+    const result = await runCli(["calc", "two", "+", "3"]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stdout).toBe("");
+    expect(result.stderr).toContain("command-argument value 'two' is invalid");
+    expect(result.stderr).toContain("must be a finite number");
+  });
 });
