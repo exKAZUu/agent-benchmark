@@ -62,6 +62,25 @@ describe("cli", () => {
     expect(result.stderr).toContain("Operator must be one of: +, -, *, /, %");
   });
 
+  test("calc handles subtraction with a lone dash operator", async () => {
+    const result = await runCli(["calc", "10", "-", "4"]);
+    expect(result.exitCode).toBe(0);
+    expect(result.stderr).toBe("");
+    expect(result.stdout).toBe("6");
+  });
+
+  test("rejects missing arguments", async () => {
+    const result = await runCli(["calc", "2", "+"]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("missing required argument 'right'");
+  });
+
+  test("rejects unknown commands", async () => {
+    const result = await runCli(["nope"]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("unknown command 'nope'");
+  });
+
   test("rejects non-numeric operands", async () => {
     const result = await runCli(["calc", "two", "+", "3"]);
     expect(result.exitCode).toBe(1);
