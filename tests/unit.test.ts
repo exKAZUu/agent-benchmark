@@ -17,4 +17,8 @@ describe("calculate", () => {
   test("divides", () => {
     expect(calculate(12, "/", 3)).toBe(4);
   });
+
+  test("returns the remainder", () => {
+    expect(calculate(14, "%", 5)).toBe(4);
+  });
 });
