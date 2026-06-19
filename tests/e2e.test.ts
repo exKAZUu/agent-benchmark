@@ -44,4 +44,30 @@ describe("cli", () => {
     expect(result.stderr).toBe("");
     expect(result.stdout).toBe("3");
   });
+
+  test("calc rejects a non-numeric argument", async () => {
+    const result = await runCli(["calc", "abc", "+", "3"]);
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stderr).toContain("must be a number");
+  });
+
+  test("calc rejects an unknown operator", async () => {
+    const result = await runCli(["calc", "2", "^", "3"]);
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stderr).toContain("must be one of");
+  });
+
+  test("no arguments prints help and exits non-zero", async () => {
+    const result = await runCli([]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stdout).toContain("calc");
+    expect(result.stdout).toContain("hello");
+  });
+
+  test("--help lists the available commands", async () => {
+    const result = await runCli(["--help"]);
+    expect(result.exitCode).toBe(0);
+    expect(result.stdout).toContain("calc");
+    expect(result.stdout).toContain("hello");
+  });
 });
