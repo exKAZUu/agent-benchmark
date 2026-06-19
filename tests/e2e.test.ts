@@ -50,7 +50,16 @@ describe("cli", () => {
     expect(result.exitCode).toBe(1);
     expect(result.stdout).toBe("");
     expect(result.stderr).toContain(
-      "error: command-argument value 'abc' is invalid for argument 'left'. must be a number",
+      "error: command-argument value 'abc' is invalid for argument 'left'. must be a finite number",
+    );
+  });
+
+  test("calc rejects a non-finite number", async () => {
+    const result = await runCli(["calc", "Infinity", "+", "3"]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stdout).toBe("");
+    expect(result.stderr).toContain(
+      "error: command-argument value 'Infinity' is invalid for argument 'left'. must be a finite number",
     );
   });
 

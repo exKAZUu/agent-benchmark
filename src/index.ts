@@ -6,8 +6,8 @@ const operators = ["+", "-", "*", "/", "%"] as const;
 function parseNumber(value: string): number {
   const parsed = Number(value);
 
-  if (Number.isNaN(parsed)) {
-    throw new InvalidArgumentError("must be a number");
+  if (!Number.isFinite(parsed)) {
+    throw new InvalidArgumentError("must be a finite number");
   }
 
   return parsed;
