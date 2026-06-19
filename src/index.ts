@@ -1,43 +1,45 @@
-import yargs from "yargs";
-import { hideBin } from "yargs/helpers";
-import { calculate, currentText } from "./cli";
+import { Argument, Command, InvalidArgumentError } from "commander";
+import { calculate, currentText, type Operator } from "./cli";
 
-yargs(hideBin(process.argv))
-  .command(
-    "hello",
-    "Print the current text",
-    () => {},
-    () => {
-      console.log(currentText);
-    },
-  )
-  .command(
-    "calc <left> <operator> <right>",
-    "Calculate a result from two numbers and an operator",
-    (cmd) =>
-      cmd
-        .positional("left", {
-          type: "number",
-          demandOption: true,
-        })
-        .positional("operator", {
-          type: "string",
-          choices: ["+", "-", "*", "/"] as const,
-          demandOption: true,
-        })
-        .positional("right", {
-          type: "number",
-          demandOption: true,
-        }),
-    (argv) => {
-      const left = argv.left as number;
-      const right = argv.right as number;
-      const operator = argv.operator as "+" | "-" | "*" | "/";
+function parseNumber(value: string): number {
+  const parsed = Number(value);
 
-      console.log(calculate(left, operator, right));
-    },
+  if (Number.isNaN(parsed)) {
+    throw new InvalidArgumentError("must be a number");
+  }
+
+  return parsed;
+}
+
+const program = new Command();
+
+program
+  .name("agent-benchmark")
+  .description("A benchmark for coding agents")
+  .showHelpAfterError()
+  .showSuggestionAfterError();
+
+program
+  .command("hello")
+  .description("Print the current text")
+  .action(() => {
+    console.log(currentText);
+  });
+
+program
+  .command("calc")
+  .description("Calculate a result from two numbers and an operator")
+  .addArgument(new Argument("<left>", "left number").argParser(parseNumber))
+  .addArgument(
+    new Argument("<operator>", "operator").choices(["+", "-", "*", "/", "%"]),
   )
-  .demandCommand(1)
-  .strict()
-  .help()
-  .parse();
+  .addArgument(new Argument("<right>", "right number").argParser(parseNumber))
+  .action((left: number, operator: Operator, right: number) => {
+    console.log(calculate(left, operator, right));
+  });
+
+if (process.argv.length <= 2) {
+  program.help({ error: true });
+}
+
+program.parse();
