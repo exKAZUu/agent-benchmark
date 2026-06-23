@@ -1,6 +1,8 @@
 import yargs from "yargs";
+import type { ArgumentsCamelCase, Argv } from "yargs";
 import { hideBin } from "yargs/helpers";
 import { calculate, currentText } from "./cli";
+import type { Operator } from "./cli";
 
 yargs(hideBin(process.argv))
   .command(
@@ -14,7 +16,7 @@ yargs(hideBin(process.argv))
   .command(
     "calc <left> <operator> <right>",
     "Calculate a result from two numbers and an operator",
-    (cmd) =>
+    (cmd: Argv) =>
       cmd
         .positional("left", {
           type: "number",
@@ -22,17 +24,15 @@ yargs(hideBin(process.argv))
         })
         .positional("operator", {
           type: "string",
-          choices: ["+", "-", "*", "/"] as const,
+          choices: ["+", "-", "*", "/", "%"] as const,
           demandOption: true,
         })
         .positional("right", {
           type: "number",
           demandOption: true,
         }),
-    (argv) => {
-      const left = argv.left as number;
-      const right = argv.right as number;
-      const operator = argv.operator as "+" | "-" | "*" | "/";
+    (argv: ArgumentsCamelCase<{ left: number; operator: Operator; right: number }>) => {
+      const { left, operator, right } = argv;
 
       console.log(calculate(left, operator, right));
     },
