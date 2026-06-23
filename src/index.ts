@@ -1,6 +1,5 @@
-import yargs from "yargs";
-import { hideBin } from "yargs/helpers";
-import { calculate, currentText } from "./cli";
+import { Command, InvalidArgumentError } from "commander";
+import { calculate, currentText, type Operator } from "./cli";
 
 yargs(hideBin(process.argv))
   .command(
@@ -22,7 +21,7 @@ yargs(hideBin(process.argv))
         })
         .positional("operator", {
           type: "string",
-          choices: ["+", "-", "*", "/"] as const,
+          choices: ["+", "-", "*", "/", "%"] as const,
           demandOption: true,
         })
         .positional("right", {
@@ -32,7 +31,7 @@ yargs(hideBin(process.argv))
     (argv) => {
       const left = argv.left as number;
       const right = argv.right as number;
-      const operator = argv.operator as "+" | "-" | "*" | "/";
+      const operator = argv.operator as "+" | "-" | "*" | "/" | "%";
 
       console.log(calculate(left, operator, right));
     },
