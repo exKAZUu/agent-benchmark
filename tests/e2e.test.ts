@@ -37,4 +37,24 @@ describe("cli", () => {
     expect(result.stderr).toBe("");
     expect(result.stdout).toBe("5");
   });
+
+  test("calc supports division", async () => {
+    const result = await runCli(["calc", "6", "/", "2"]);
+    expect(result.exitCode).toBe(0);
+    expect(result.stderr).toBe("");
+    expect(result.stdout).toBe("3");
+  });
+
+  test("calc rejects an invalid operator", async () => {
+    const result = await runCli(["calc", "2", "x", "3"]);
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stdout).toBe("");
+    expect(result.stderr).toContain("operator");
+  });
+
+  test("rejects an unknown command", async () => {
+    const result = await runCli(["bogus"]);
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stderr).toContain("unknown command");
+  });
 });
