@@ -37,4 +37,53 @@ describe("cli", () => {
     expect(result.stderr).toBe("");
     expect(result.stdout).toBe("5");
   });
+
+  test("calc handles negative numbers and decimals", async () => {
+    const result = await runCli(["calc", "-2.5", "*", "4"]);
+    expect(result.exitCode).toBe(0);
+    expect(result.stderr).toBe("");
+    expect(result.stdout).toBe("-10");
+  });
+
+  test("fails when no arguments are provided", async () => {
+    const result = await runCli([]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stdout + result.stderr).toContain("Usage: agent-benchmark");
+  });
+
+  test("fails on invalid command", async () => {
+    const result = await runCli(["invalidcmd"]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("Error: Invalid command");
+  });
+
+  test("fails on invalid left operand", async () => {
+    const result = await runCli(["calc", "foo", "+", "3"]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("Error: left operand must be a number");
+  });
+
+  test("fails on invalid operator", async () => {
+    const result = await runCli(["calc", "2", "%", "3"]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("Error: operator must be one of");
+  });
+
+  test("fails on invalid right operand", async () => {
+    const result = await runCli(["calc", "2", "+", "bar"]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("Error: right operand must be a number");
+  });
+
+  test("fails on missing operand", async () => {
+    const result = await runCli(["calc", "2", "+"]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("missing required argument");
+  });
+
+  test("displays help info with --help option", async () => {
+    const result = await runCli(["--help"]);
+    expect(result.exitCode).toBe(0);
+    expect(result.stdout).toContain("Usage: agent-benchmark");
+  });
 });
