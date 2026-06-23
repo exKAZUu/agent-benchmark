@@ -37,4 +37,29 @@ describe("cli", () => {
     expect(result.stderr).toBe("");
     expect(result.stdout).toBe("5");
   });
+
+  test("calc rejects an unsupported operator", async () => {
+    const result = await runCli(["calc", "2", "%", "3"]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stdout).toBe("");
+    expect(result.stderr).toContain("value '%' is invalid for argument 'operator'");
+    expect(result.stderr).toContain("Usage: agent-benchmark calc");
+  });
+
+  test("calc rejects non-numeric values", async () => {
+    const result = await runCli(["calc", "two", "+", "3"]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stdout).toBe("");
+    expect(result.stderr).toContain("value 'two' is invalid for argument 'left'");
+    expect(result.stderr).toContain("must be a finite number");
+  });
+
+  test("prints help and exits with an error when no command is provided", async () => {
+    const result = await runCli([]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stdout).toBe("");
+    expect(result.stderr).toContain("Usage: agent-benchmark");
+    expect(result.stderr).toContain("hello");
+    expect(result.stderr).toContain("calc <left> <operator> <right>");
+  });
 });
