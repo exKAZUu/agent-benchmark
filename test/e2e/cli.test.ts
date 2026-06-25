@@ -2,7 +2,7 @@ import { describe, expect, test } from "bun:test";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 
-const entry = join(dirname(fileURLToPath(import.meta.url)), "..", "src", "index.ts");
+const entry = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "src", "index.ts");
 
 async function runCli(args: string[]) {
   const proc = Bun.spawn(["bun", "run", entry, ...args], {
@@ -36,5 +36,25 @@ describe("cli", () => {
     expect(result.exitCode).toBe(0);
     expect(result.stderr).toBe("");
     expect(result.stdout).toBe("5");
+  });
+
+  test("requires a command", async () => {
+    const result = await runCli([]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("Usage:");
+    expect(result.stderr).toContain("hello");
+    expect(result.stderr).toContain("calc");
+  });
+
+  test("rejects non-numeric calculator input", async () => {
+    const result = await runCli(["calc", "two", "+", "3"]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("must be a number");
+  });
+
+  test("rejects unsupported operators", async () => {
+    const result = await runCli(["calc", "2", "%", "3"]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("'%'");
   });
 });
