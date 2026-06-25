@@ -1,43 +1,40 @@
-import yargs from "yargs";
-import { hideBin } from "yargs/helpers";
+import { Command, InvalidArgumentError } from "commander";
 import { calculate, currentText } from "./cli";
 
-yargs(hideBin(process.argv))
-  .command(
-    "hello",
-    "Print the current text",
-    () => {},
-    () => {
-      console.log(currentText);
-    },
-  )
-  .command(
-    "calc <left> <operator> <right>",
-    "Calculate a result from two numbers and an operator",
-    (cmd) =>
-      cmd
-        .positional("left", {
-          type: "number",
-          demandOption: true,
-        })
-        .positional("operator", {
-          type: "string",
-          choices: ["+", "-", "*", "/"] as const,
-          demandOption: true,
-        })
-        .positional("right", {
-          type: "number",
-          demandOption: true,
-        }),
-    (argv) => {
-      const left = argv.left as number;
-      const right = argv.right as number;
-      const operator = argv.operator as "+" | "-" | "*" | "/";
+function parseFloatArg(value: string) {
+  const parsedValue = parseFloat(value);
+  if (isNaN(parsedValue)) {
+    throw new InvalidArgumentError("Not a number.");
+  }
+  return parsedValue;
+}
 
-      console.log(calculate(left, operator, right));
-    },
-  )
-  .demandCommand(1)
-  .strict()
-  .help()
-  .parse();
+function parseOperatorArg(value: string) {
+  const choices = ["+", "-", "*", "/"];
+  if (!choices.includes(value)) {
+    throw new InvalidArgumentError(`Allowed choices are ${choices.join(", ")}.`);
+  }
+  return value as "+" | "-" | "*" | "/";
+}
+
+const program = new Command();
+
+program
+  .command("hello")
+  .description("Print the current text")
+  .action(() => {
+    console.log(currentText);
+  });
+
+program
+  .command("calc")
+  .description("Calculate a result from two numbers and an operator")
+  .argument("<left>", "left number", parseFloatArg)
+  .argument("<operator>", "operator", parseOperatorArg)
+  .argument("<right>", "right number", parseFloatArg)
+  .action((left: number, operator: "+" | "-" | "*" | "/", right: number) => {
+    console.log(calculate(left, operator, right));
+  });
+
+program.parse(process.argv);
+
