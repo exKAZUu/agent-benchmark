@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { calculate } from "../src/cli";
+import { calculate } from "../../src/cli";
 
 describe("calculate", () => {
   test("adds", () => {
@@ -16,5 +16,9 @@ describe("calculate", () => {
 
   test("divides", () => {
     expect(calculate(12, "/", 3)).toBe(4);
+  });
+
+  test("calculates the remainder", () => {
+    expect(calculate(14, "%", 5)).toBe(4);
   });
 });
