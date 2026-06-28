@@ -37,4 +37,17 @@ describe("cli", () => {
     expect(result.stderr).toBe("");
     expect(result.stdout).toBe("5");
   });
+
+  test("calc rejects an unsupported operator", async () => {
+    const result = await runCli(["calc", "2", "%", "3"]);
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stdout).toBe("");
+    expect(result.stderr).toContain("+, -, *, /");
+  });
+
+  test("unknown command fails", async () => {
+    const result = await runCli(["bye"]);
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stdout).toBe("");
+  });
 });
