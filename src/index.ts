@@ -1,43 +1,29 @@
-import yargs from "yargs";
-import { hideBin } from "yargs/helpers";
-import { calculate, currentText } from "./cli";
+import { Command } from "commander";
+import { calculate, type Operator, currentText } from "./cli";
 
-yargs(hideBin(process.argv))
-  .command(
-    "hello",
-    "Print the current text",
-    () => {},
-    () => {
-      console.log(currentText);
-    },
-  )
-  .command(
-    "calc <left> <operator> <right>",
-    "Calculate a result from two numbers and an operator",
-    (cmd) =>
-      cmd
-        .positional("left", {
-          type: "number",
-          demandOption: true,
-        })
-        .positional("operator", {
-          type: "string",
-          choices: ["+", "-", "*", "/"] as const,
-          demandOption: true,
-        })
-        .positional("right", {
-          type: "number",
-          demandOption: true,
-        }),
-    (argv) => {
-      const left = argv.left as number;
-      const right = argv.right as number;
-      const operator = argv.operator as "+" | "-" | "*" | "/";
+const program = new Command();
 
-      console.log(calculate(left, operator, right));
-    },
-  )
-  .demandCommand(1)
-  .strict()
-  .help()
-  .parse();
+program.name("agent-benchmark").description("A benchmark for coding agents");
+
+program
+  .command("hello")
+  .description("Print the current text")
+  .action(() => {
+    console.log(currentText);
+  });
+
+program
+  .command("calc")
+  .description("Calculate a result from two numbers and an operator")
+  .argument("<left>", "left operand", Number.parseFloat)
+  .argument("<operator>", "one of + - * /")
+  .argument("<right>", "right operand", Number.parseFloat)
+  .action((left: number, operator: string, right: number) => {
+    if (operator !== "+" && operator !== "-" && operator !== "*" && operator !== "/") {
+      program.error(`error: invalid operator '${operator}', expected one of + - * /`);
+    }
+
+    console.log(calculate(left, operator as Operator, right));
+  });
+
+program.parse();
