@@ -28,7 +28,7 @@ describe("cli", () => {
     const result = await runCli(["hello"]);
     expect(result.exitCode).toBe(0);
     expect(result.stderr).toBe("");
-    expect(result.stdout).toBe("Hello via Bun!");
+    expect(result.stdout).toBe("Hello, World!");
   });
 
   test("hello prints Hello, World!", async () => {
