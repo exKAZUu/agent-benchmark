@@ -1,43 +1,52 @@
-import yargs from "yargs";
-import { hideBin } from "yargs/helpers";
-import { calculate, currentText } from "./cli";
+import { Command, InvalidArgumentError } from "commander";
+import { calculate, currentText, type Operator } from "./cli";
 
-yargs(hideBin(process.argv))
-  .command(
-    "hello",
-    "Print the current text",
-    () => {},
-    () => {
-      console.log(currentText);
-    },
-  )
-  .command(
-    "calc <left> <operator> <right>",
-    "Calculate a result from two numbers and an operator",
-    (cmd) =>
-      cmd
-        .positional("left", {
-          type: "number",
-          demandOption: true,
-        })
-        .positional("operator", {
-          type: "string",
-          choices: ["+", "-", "*", "/"] as const,
-          demandOption: true,
-        })
-        .positional("right", {
-          type: "number",
-          demandOption: true,
-        }),
-    (argv) => {
-      const left = argv.left as number;
-      const right = argv.right as number;
-      const operator = argv.operator as "+" | "-" | "*" | "/";
+const operators = ["+", "-", "*", "/"] as const satisfies readonly Operator[];
 
-      console.log(calculate(left, operator, right));
-    },
-  )
-  .demandCommand(1)
-  .strict()
-  .help()
-  .parse();
+function parseNumber(value: string): number {
+  const parsed = Number(value);
+
+  if (!Number.isFinite(parsed)) {
+    throw new InvalidArgumentError("must be a finite number");
+  }
+
+  return parsed;
+}
+
+function parseOperator(value: string): Operator {
+  if (operators.includes(value as Operator)) {
+    return value as Operator;
+  }
+
+  throw new InvalidArgumentError(`must be one of: ${operators.join(", ")}`);
+}
+
+const program = new Command();
+
+program
+  .name("agent-benchmark")
+  .showHelpAfterError()
+  .showSuggestionAfterError();
+
+program
+  .command("hello")
+  .description("Print the current text")
+  .action(() => {
+    console.log(currentText);
+  });
+
+program
+  .command("calc")
+  .description("Calculate a result from two numbers and an operator")
+  .argument("<left>", "left number", parseNumber)
+  .argument("<operator>", "operator", parseOperator)
+  .argument("<right>", "right number", parseNumber)
+  .action((left: number, operator: Operator, right: number) => {
+    console.log(calculate(left, operator, right));
+  });
+
+if (process.argv.length <= 2) {
+  program.help({ error: true });
+}
+
+program.parse();
