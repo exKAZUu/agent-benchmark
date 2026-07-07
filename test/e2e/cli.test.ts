@@ -1,8 +1,8 @@
 import { describe, expect, test } from "bun:test";
-import { fileURLToPath } from "url";
 import { dirname, join } from "path";
+import { fileURLToPath } from "url";
 
-const entry = join(dirname(fileURLToPath(import.meta.url)), "..", "src", "index.ts");
+const entry = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "src", "index.ts");
 
 async function runCli(args: string[]) {
   const proc = Bun.spawn(["bun", "run", entry, ...args], {
@@ -36,5 +36,21 @@ describe("cli", () => {
     expect(result.exitCode).toBe(0);
     expect(result.stderr).toBe("");
     expect(result.stdout).toBe("5");
+  });
+
+  test("calc rejects a non-numeric operand", async () => {
+    const result = await runCli(["calc", "two", "+", "3"]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stdout).toBe("");
+    expect(result.stderr).toContain("invalid for argument 'left'");
+    expect(result.stderr).toContain("must be a finite number");
+  });
+
+  test("running without a command prints command help and fails", async () => {
+    const result = await runCli([]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stdout).toBe("");
+    expect(result.stderr).toContain("Usage: agent-benchmark");
+    expect(result.stderr).toContain("Commands:");
   });
 });
