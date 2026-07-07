@@ -37,4 +37,11 @@ describe("cli", () => {
     expect(result.stderr).toBe("");
     expect(result.stdout).toBe("5");
   });
+
+  test("calc modulo prints only the number result", async () => {
+    const result = await runCli(["calc", "12", "%", "5"]);
+    expect(result.exitCode).toBe(0);
+    expect(result.stderr).toBe("");
+    expect(result.stdout).toBe("2");
+  });
 });
