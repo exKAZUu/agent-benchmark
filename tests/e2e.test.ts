@@ -37,4 +37,53 @@ describe("cli", () => {
     expect(result.stderr).toBe("");
     expect(result.stdout).toBe("5");
   });
+
+  test("calc prints only the number result for modulo", async () => {
+    const result = await runCli(["calc", "10", "%", "3"]);
+    expect(result.exitCode).toBe(0);
+    expect(result.stderr).toBe("");
+    expect(result.stdout).toBe("1");
+  });
+
+  test("no arguments prints help and exits with non-zero", async () => {
+    const result = await runCli([]);
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stdout).toContain("Usage:");
+  });
+
+  test("help option prints help and exits with zero", async () => {
+    const result = await runCli(["--help"]);
+    expect(result.exitCode).toBe(0);
+    expect(result.stdout).toContain("Usage:");
+  });
+
+  test("invalid command prints error and exits with non-zero", async () => {
+    const result = await runCli(["invalid-cmd"]);
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stderr).toContain("error: unknown command");
+  });
+
+  test("calc with missing arguments prints error and exits with non-zero", async () => {
+    const result = await runCli(["calc", "2"]);
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stderr).toContain("error: missing required argument");
+  });
+
+  test("calc with non-numeric left operand prints error and exits with non-zero", async () => {
+    const result = await runCli(["calc", "abc", "+", "3"]);
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stderr).toContain("error: argument 'left' must be a number");
+  });
+
+  test("calc with non-numeric right operand prints error and exits with non-zero", async () => {
+    const result = await runCli(["calc", "2", "+", "abc"]);
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stderr).toContain("error: argument 'right' must be a number");
+  });
+
+  test("calc with invalid operator prints error and exits with non-zero", async () => {
+    const result = await runCli(["calc", "2", "invalid_operator", "3"]);
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stderr).toContain("error: argument 'operator' must be one of");
+  });
 });
