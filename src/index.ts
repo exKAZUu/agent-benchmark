@@ -22,7 +22,7 @@ yargs(hideBin(process.argv))
         })
         .positional("operator", {
           type: "string",
-          choices: ["+", "-", "*", "/"] as const,
+          choices: ["+", "-", "*", "/", "%"] as const,
           demandOption: true,
         })
         .positional("right", {
@@ -32,7 +32,7 @@ yargs(hideBin(process.argv))
     (argv) => {
       const left = argv.left as number;
       const right = argv.right as number;
-      const operator = argv.operator as "+" | "-" | "*" | "/";
+      const operator = argv.operator as "+" | "-" | "*" | "/" | "%";
 
       console.log(calculate(left, operator, right));
     },
