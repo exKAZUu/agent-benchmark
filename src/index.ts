@@ -29,12 +29,12 @@ program
       console.error("Error: right must be a number");
       process.exit(1);
     }
-    if (!["+", "-", "*", "/"].includes(operatorStr)) {
-      console.error("Error: operator must be one of +, -, *, /");
+    if (!["+", "-", "*", "/", "%"].includes(operatorStr)) {
+      console.error("Error: operator must be one of +, -, *, /, %");
       process.exit(1);
     }
 
-    console.log(calculate(left, operatorStr as "+" | "-" | "*" | "/", right));
+    console.log(calculate(left, operatorStr as "+" | "-" | "*" | "/" | "%", right));
   });
 
 program.parse(process.argv);

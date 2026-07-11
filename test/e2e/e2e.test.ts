@@ -64,9 +64,16 @@ describe("cli", () => {
   });
 
   test("calc with invalid operator prints error and exits with non-zero code", async () => {
-    const result = await runCli(["calc", "2", "%", "3"]);
+    const result = await runCli(["calc", "2", "^", "3"]);
     expect(result.exitCode).toBe(1);
-    expect(result.stderr).toBe("Error: operator must be one of +, -, *, /");
+    expect(result.stderr).toBe("Error: operator must be one of +, -, *, /, %");
+  });
+
+  test("calc prints only the number result for modulo operator", async () => {
+    const result = await runCli(["calc", "13", "%", "5"]);
+    expect(result.exitCode).toBe(0);
+    expect(result.stderr).toBe("");
+    expect(result.stdout).toBe("3");
   });
 
   test("help option displays program usage", async () => {
