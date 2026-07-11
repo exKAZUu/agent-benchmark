@@ -37,4 +37,36 @@ describe("cli", () => {
     expect(result.stderr).toBe("");
     expect(result.stdout).toBe("5");
   });
+
+  test("no arguments outputs help and exits with 1", async () => {
+    const result = await runCli([]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("Usage: cli [options] [command]");
+    expect(result.stderr).toContain("hello");
+    expect(result.stderr).toContain("calc");
+  });
+
+  test("invalid command exits with 1 and prints error", async () => {
+    const result = await runCli(["foo"]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("error: unknown command 'foo'");
+  });
+
+  test("invalid left argument exits with 1 and prints error", async () => {
+    const result = await runCli(["calc", "foo", "+", "3"]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("Error: left must be a number");
+  });
+
+  test("invalid right argument exits with 1 and prints error", async () => {
+    const result = await runCli(["calc", "2", "+", "foo"]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("Error: right must be a number");
+  });
+
+  test("invalid operator exits with 1 and prints error", async () => {
+    const result = await runCli(["calc", "2", "foo", "3"]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("Error: operator must be one of +, -, *, /");
+  });
 });
