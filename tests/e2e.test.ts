@@ -44,4 +44,35 @@ describe("cli", () => {
     expect(result.stderr).toBe("");
     expect(result.stdout).toBe("3");
   });
+
+  test("fails when invalid command is provided", async () => {
+    const result = await runCli(["invalid-command"]);
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stderr).toContain("Invalid command");
+  });
+
+  test("fails when no arguments are provided", async () => {
+    const result = await runCli([]);
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stderr).toContain("Usage:");
+  });
+
+  test("fails when left operand is not a number", async () => {
+    const result = await runCli(["calc", "abc", "+", "3"]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain('Error: "abc" is not a number.');
+  });
+
+  test("fails when right operand is not a number", async () => {
+    const result = await runCli(["calc", "2", "+", "xyz"]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain('Error: "xyz" is not a number.');
+  });
+
+  test("fails when operator is invalid", async () => {
+    const result = await runCli(["calc", "2", "foo", "3"]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain('Error: Invalid operator "foo".');
+  });
 });
+
