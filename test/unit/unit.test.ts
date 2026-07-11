@@ -17,4 +17,10 @@ describe("calculate", () => {
   test("divides", () => {
     expect(calculate(12, "/", 3)).toBe(4);
   });
+
+  test("modulos", () => {
+    expect(calculate(10, "%", 3)).toBe(1);
+    expect(calculate(12, "%", 4)).toBe(0);
+    expect(calculate(-10, "%", 3)).toBe(-1);
+  });
 });
