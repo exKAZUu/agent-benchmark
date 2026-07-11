@@ -2,19 +2,23 @@ import { describe, expect, test } from "bun:test";
 import { calculate } from "../src/cli";
 
 describe("calculate", () => {
-  test("adds", () => {
+  test("adds two numbers", () => {
     expect(calculate(2, "+", 3)).toBe(5);
   });
 
-  test("subtracts", () => {
-    expect(calculate(10, "-", 4)).toBe(6);
+  test("subtracts two numbers", () => {
+    expect(calculate(5, "-", 3)).toBe(2);
   });
 
-  test("multiplies", () => {
-    expect(calculate(3, "*", 4)).toBe(12);
+  test("multiplies two numbers", () => {
+    expect(calculate(4, "*", 3)).toBe(12);
   });
 
-  test("divides", () => {
-    expect(calculate(12, "/", 3)).toBe(4);
+  test("divides two numbers", () => {
+    expect(calculate(6, "/", 3)).toBe(2);
+  });
+
+  test("computes the modulo", () => {
+    expect(calculate(13, "%", 5)).toBe(3);
   });
 });
