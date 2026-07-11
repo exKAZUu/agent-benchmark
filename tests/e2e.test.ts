@@ -37,4 +37,37 @@ describe("cli", () => {
     expect(result.stderr).toBe("");
     expect(result.stdout).toBe("5");
   });
+
+  test("calc divides", async () => {
+    const result = await runCli(["calc", "12", "/", "3"]);
+    expect(result.exitCode).toBe(0);
+    expect(result.stderr).toBe("");
+    expect(result.stdout).toBe("4");
+  });
+
+  test("calc rejects a non-numeric operand", async () => {
+    const result = await runCli(["calc", "foo", "+", "3"]);
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stdout).toBe("");
+    expect(result.stderr).toContain("Not a number.");
+  });
+
+  test("calc rejects an invalid operator", async () => {
+    const result = await runCli(["calc", "2", "%", "3"]);
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stdout).toBe("");
+    expect(result.stderr).toContain("operator");
+  });
+
+  test("rejects an unknown command", async () => {
+    const result = await runCli(["nope"]);
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stderr).toContain("unknown command");
+  });
+
+  test("requires a command", async () => {
+    const result = await runCli([]);
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stderr).toContain("Usage:");
+  });
 });
