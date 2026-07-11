@@ -10,8 +10,8 @@ function parseNumber(value: string): number {
 }
 
 function parseOperator(value: string): Operator {
-  if (value !== "+" && value !== "-" && value !== "*" && value !== "/") {
-    throw new InvalidArgumentError('Allowed choices are "+", "-", "*", "/".');
+  if (value !== "+" && value !== "-" && value !== "*" && value !== "/" && value !== "%") {
+    throw new InvalidArgumentError('Allowed choices are "+", "-", "*", "/", "%".');
   }
   return value;
 }
