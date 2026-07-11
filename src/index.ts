@@ -1,5 +1,5 @@
-import { Argument, Command } from "commander";
-import { calculate, currentText, type Operator } from "./cli";
+import { Command } from "commander";
+import { calculate, currentText, Operator } from "./cli";
 
 const program = new Command();
 
@@ -15,18 +15,33 @@ program
   });
 
 program
-  .command("calc")
+  .command("calc <left> <operator> <right>")
   .description("Calculate a result from two numbers and an operator")
-  .addArgument(new Argument("<left>", "left operand").argParser(Number))
-  .addArgument(new Argument("<operator>", "operator").choices(["+", "-", "*", "/", "%"]))
-  .addArgument(new Argument("<right>", "right operand").argParser(Number))
-  .action((left: number, operator: Operator, right: number) => {
+  .action((leftStr, operatorStr, rightStr) => {
+    const left = Number(leftStr);
+    const right = Number(rightStr);
+    const operator = operatorStr as Operator;
+    const validOperators = ["+", "-", "*", "/", "%"];
+
+    if (isNaN(left) || leftStr === "" || isNaN(Number(leftStr))) {
+      console.error("error: Left operand must be a number");
+      process.exit(1);
+    }
+    if (!validOperators.includes(operatorStr)) {
+      console.error(`error: Operator must be one of ${validOperators.join(", ")} (invalid operator)`);
+      process.exit(1);
+    }
+    if (isNaN(right) || rightStr === "" || isNaN(Number(rightStr))) {
+      console.error("error: Right operand must be a number");
+      process.exit(1);
+    }
+
     console.log(calculate(left, operator, right));
   });
 
-program.parse();
+program.parse(process.argv);
 
-if (program.args.length === 0) {
-  program.outputHelp();
+if (process.argv.length <= 2) {
+  console.error(program.helpInformation());
   process.exit(1);
 }
