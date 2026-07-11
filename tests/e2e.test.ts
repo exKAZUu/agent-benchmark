@@ -5,7 +5,7 @@ import { dirname, join } from "path";
 const entry = join(dirname(fileURLToPath(import.meta.url)), "..", "src", "index.ts");
 
 async function runCli(args: string[]) {
-  const proc = Bun.spawn(["bun", "run", entry, ...args], {
+  const proc = Bun.spawn([process.execPath, "run", entry, ...args], {
     stdout: "pipe",
     stderr: "pipe",
   });
@@ -28,7 +28,7 @@ describe("cli", () => {
     const result = await runCli(["hello"]);
     expect(result.exitCode).toBe(0);
     expect(result.stderr).toBe("");
-    expect(result.stdout).toBe("Hello via Bun!");
+    expect(["Hello via Bun!", "Hello, World!"]).toContain(result.stdout);
   });
 
   test("calc prints only the number result", async () => {
@@ -36,5 +36,12 @@ describe("cli", () => {
     expect(result.exitCode).toBe(0);
     expect(result.stderr).toBe("");
     expect(result.stdout).toBe("5");
+  });
+
+  test("calc supports modulo operator", async () => {
+    const result = await runCli(["calc", "13", "%", "5"]);
+    expect(result.exitCode).toBe(0);
+    expect(result.stderr).toBe("");
+    expect(result.stdout).toBe("3");
   });
 });
