@@ -37,4 +37,35 @@ describe("cli", () => {
     expect(result.stderr).toBe("");
     expect(result.stdout).toBe("5");
   });
+
+  test("calc computes the modulo result", async () => {
+    const result = await runCli(["calc", "13", "%", "5"]);
+    expect(result.exitCode).toBe(0);
+    expect(result.stderr).toBe("");
+    expect(result.stdout).toBe("3");
+  });
+
+  test("running with no arguments exits with code 1 and outputs help", async () => {
+    const result = await runCli([]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("Usage:");
+  });
+
+  test("calc with invalid left operand outputs error and exits with code 1", async () => {
+    const result = await runCli(["calc", "abc", "+", "3"]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("error: Left operand must be a number");
+  });
+
+  test("calc with invalid operator outputs error and exits with code 1", async () => {
+    const result = await runCli(["calc", "2", "invalid_operator", "3"]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("error: Operator must be one of");
+  });
+
+  test("calc with invalid right operand outputs error and exits with code 1", async () => {
+    const result = await runCli(["calc", "2", "+", "xyz"]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("error: Right operand must be a number");
+  });
 });
