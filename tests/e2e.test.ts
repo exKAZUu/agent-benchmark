@@ -37,4 +37,41 @@ describe("cli", () => {
     expect(result.stderr).toBe("");
     expect(result.stdout).toBe("5");
   });
+
+  test("no arguments prints help and exits with 1", async () => {
+    const result = await runCli([]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stdout).toContain("Usage: agent-benchmark");
+  });
+
+  test("help option prints help and exits with 0", async () => {
+    const result = await runCli(["--help"]);
+    expect(result.exitCode).toBe(0);
+    expect(result.stdout).toContain("Usage: agent-benchmark");
+  });
+
+  test("unknown command prints error and exits with 1", async () => {
+    const result = await runCli(["invalid-command"]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("error: unknown command");
+  });
+
+  test("calc with invalid left operand prints error and exits with 1", async () => {
+    const result = await runCli(["calc", "abc", "+", "3"]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("Error: Invalid number for 'left'");
+  });
+
+  test("calc with invalid right operand prints error and exits with 1", async () => {
+    const result = await runCli(["calc", "2", "+", "xyz"]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("Error: Invalid number for 'right'");
+  });
+
+  test("calc with invalid operator prints error and exits with 1", async () => {
+    const result = await runCli(["calc", "2", "invalid_operator", "3"]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("Error: Invalid operator");
+  });
 });
+
