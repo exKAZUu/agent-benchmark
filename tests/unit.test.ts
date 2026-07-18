@@ -17,4 +17,8 @@ describe("calculate", () => {
   test("divides", () => {
     expect(calculate(12, "/", 3)).toBe(4);
   });
+
+  test("takes the modulo", () => {
+    expect(calculate(13, "%", 5)).toBe(3);
+  });
 });
