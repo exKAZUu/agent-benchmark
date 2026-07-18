@@ -37,4 +37,11 @@ describe("cli", () => {
     expect(result.stderr).toBe("");
     expect(result.stdout).toBe("5");
   });
+
+  test("calc supports the modulo operator", async () => {
+    const result = await runCli(["calc", "13", "%", "4"]);
+    expect(result.exitCode).toBe(0);
+    expect(result.stderr).toBe("");
+    expect(result.stdout).toBe("1");
+  });
 });
