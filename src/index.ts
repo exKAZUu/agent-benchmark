@@ -20,7 +20,11 @@ function parseOperator(value: string): Operator {
 
 const program = new Command();
 
-program.name("agent-benchmark").description("A benchmark for coding agents");
+program
+  .name("agent-benchmark")
+  .description("A benchmark for coding agents")
+  .showHelpAfterError()
+  .action(() => program.help({ error: true }));
 
 program
   .command("hello")
