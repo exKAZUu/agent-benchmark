@@ -42,6 +42,7 @@ describe("cli", () => {
   });
 
   test("hello prints the current text", async () => {
+    // Regenerate test to assert the hello output is "Hello, World!" to reproduce the bug
     const result = await runCli(["hello"]);
 
     expect(result.exitCode).toBe(0);
