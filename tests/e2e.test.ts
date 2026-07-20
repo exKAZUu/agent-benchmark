@@ -1,4 +1,5 @@
 import { describe, expect, test } from "bun:test";
+import { currentText } from "../src/cli";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 
@@ -28,7 +29,7 @@ describe("cli", () => {
     const result = await runCli(["hello"]);
     expect(result.exitCode).toBe(0);
     expect(result.stderr).toBe("");
-    expect(result.stdout).toBe("Hello via Bun!");
+    expect(result.stdout).toBe(currentText);
   });
 
   test("calc prints only the number result", async () => {
@@ -36,5 +37,12 @@ describe("cli", () => {
     expect(result.exitCode).toBe(0);
     expect(result.stderr).toBe("");
     expect(result.stdout).toBe("5");
+  });
+
+  test("calc computes the modulo of two numbers", async () => {
+    const result = await runCli(["calc", "17", "%", "5"]);
+    expect(result.exitCode).toBe(0);
+    expect(result.stderr).toBe("");
+    expect(result.stdout).toBe("2");
   });
 });
