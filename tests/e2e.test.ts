@@ -6,6 +6,7 @@ const entry = join(dirname(fileURLToPath(import.meta.url)), "..", "src", "index.
 
 async function runCli(args: string[]) {
   const proc = Bun.spawn(["bun", "run", entry, ...args], {
+    stdin: "ignore",
     stdout: "pipe",
     stderr: "pipe",
   });
