@@ -1,7 +1,5 @@
 import { Command, InvalidArgumentError } from "commander";
-import { calculate, currentText, type Operator } from "./cli";
-
-const operators = ["+", "-", "*", "/"] as const;
+import { calculate, currentText, operators, type Operator } from "./cli";
 
 function parseFiniteNumber(value: string): number {
   const parsed = Number(value);
