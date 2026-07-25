@@ -1,7 +1,7 @@
 import { Argument, InvalidArgumentError, program } from "commander";
 import { calculate, currentText, type Operator } from "./cli";
 
-const operators: Operator[] = ["+", "-", "*", "/"];
+const operators: Operator[] = ["+", "-", "*", "/", "%"];
 
 function parseOperand(value: string): number {
   const parsed = Number(value);

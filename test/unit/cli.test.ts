@@ -1,8 +1,8 @@
 import { describe, expect, test } from "bun:test";
-import { fileURLToPath } from "url";
 import { dirname, join } from "path";
+import { fileURLToPath } from "url";
 
-const entry = join(dirname(fileURLToPath(import.meta.url)), "..", "src", "index.ts");
+const entry = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "src", "index.ts");
 
 async function runCli(args: string[]) {
   const proc = Bun.spawn(["bun", "run", entry, ...args], {
@@ -36,6 +36,13 @@ describe("cli", () => {
     expect(result.exitCode).toBe(0);
     expect(result.stderr).toBe("");
     expect(result.stdout).toBe("5");
+  });
+
+  test("calc supports modulo", async () => {
+    const result = await runCli(["calc", "14", "%", "5"]);
+    expect(result.exitCode).toBe(0);
+    expect(result.stderr).toBe("");
+    expect(result.stdout).toBe("4");
   });
 
   test("calc keeps the fractional part of a division", async () => {
