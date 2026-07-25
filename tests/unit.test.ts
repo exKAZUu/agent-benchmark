@@ -17,4 +17,12 @@ describe("calculate", () => {
   test("divides", () => {
     expect(calculate(12, "/", 3)).toBe(4);
   });
+
+  test("takes the remainder", () => {
+    expect(calculate(10, "%", 3)).toBe(1);
+  });
+
+  test("takes the remainder of a negative left operand", () => {
+    expect(calculate(-10, "%", 3)).toBe(-1);
+  });
 });
