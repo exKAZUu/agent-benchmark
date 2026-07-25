@@ -65,9 +65,29 @@ describe("cli", () => {
     expect(result.stderr).toContain("Expected a finite number.");
   });
 
+  test("calc rejects a missing argument", async () => {
+    const result = await runCli(["calc", "2", "+"]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("missing required argument 'right'");
+  });
+
+  test("rejects an unknown command", async () => {
+    const result = await runCli(["bye"]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("unknown command 'bye'");
+  });
+
   test("requires a command when executed without arguments", async () => {
     const result = await runCli([]);
     expect(result.exitCode).toBe(1);
     expect(result.stderr).toContain("Usage: agent-benchmark");
+  });
+
+  test("--help lists both commands", async () => {
+    const result = await runCli(["--help"]);
+    expect(result.exitCode).toBe(0);
+    expect(result.stdout).toContain("Usage: agent-benchmark");
+    expect(result.stdout).toContain("hello");
+    expect(result.stdout).toContain("calc");
   });
 });
