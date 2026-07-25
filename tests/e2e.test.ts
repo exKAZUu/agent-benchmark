@@ -2,13 +2,7 @@ import { describe, expect, test } from "bun:test";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 
-const entry = join(
-  dirname(fileURLToPath(import.meta.url)),
-  "..",
-  "..",
-  "src",
-  "index.ts",
-);
+const entry = join(dirname(fileURLToPath(import.meta.url)), "..", "src", "index.ts");
 
 async function runCli(args: string[]) {
   const proc = Bun.spawn(["bun", "run", entry, ...args], {
@@ -30,11 +24,11 @@ async function runCli(args: string[]) {
 }
 
 describe("cli", () => {
-  test("hello prints Hello, World!", async () => {
+  test("hello prints the current text", async () => {
     const result = await runCli(["hello"]);
     expect(result.exitCode).toBe(0);
     expect(result.stderr).toBe("");
-    expect(result.stdout).toBe("Hello, World!");
+    expect(result.stdout).toBe("Hello via Bun!");
   });
 
   test("calc prints only the number result", async () => {
@@ -42,5 +36,12 @@ describe("cli", () => {
     expect(result.exitCode).toBe(0);
     expect(result.stderr).toBe("");
     expect(result.stdout).toBe("5");
+  });
+
+  test("calc computes the remainder", async () => {
+    const result = await runCli(["calc", "13", "%", "5"]);
+    expect(result.exitCode).toBe(0);
+    expect(result.stderr).toBe("");
+    expect(result.stdout).toBe("3");
   });
 });
