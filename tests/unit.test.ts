@@ -17,4 +17,10 @@ describe("calculate", () => {
   test("divides", () => {
     expect(calculate(12, "/", 3)).toBe(4);
   });
+
+  test("computes the remainder", () => {
+    expect(calculate(13, "%", 5)).toBe(3);
+    expect(calculate(-13, "%", 5)).toBe(-3);
+    expect(calculate(7.5, "%", 2)).toBe(1.5);
+  });
 });
