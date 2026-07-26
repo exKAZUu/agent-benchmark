@@ -2,7 +2,13 @@ import { describe, expect, test } from "bun:test";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 
-const entry = join(dirname(fileURLToPath(import.meta.url)), "..", "src", "index.ts");
+const entry = join(
+  dirname(fileURLToPath(import.meta.url)),
+  "..",
+  "..",
+  "src",
+  "index.ts",
+);
 
 async function runCli(args: string[]) {
   const proc = Bun.spawn(["bun", "run", entry, ...args], {
@@ -36,5 +42,12 @@ describe("cli", () => {
     expect(result.exitCode).toBe(0);
     expect(result.stderr).toBe("");
     expect(result.stdout).toBe("5");
+  });
+
+  test("calc supports modulo", async () => {
+    const result = await runCli(["calc", "10", "%", "4"]);
+    expect(result.exitCode).toBe(0);
+    expect(result.stderr).toBe("");
+    expect(result.stdout).toBe("2");
   });
 });
