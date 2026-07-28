@@ -34,7 +34,7 @@ describe("agent-benchmark CLI", () => {
     const result = await runCli(["hello"]);
 
     expect(result).toEqual({
-      stdout: "Hello, World!",
+      stdout: "Hello via Bun!",
       stderr: "",
       exitCode: 0,
     });
