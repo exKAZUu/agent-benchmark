@@ -2,7 +2,13 @@ import { describe, expect, test } from "bun:test";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 
-const entry = join(dirname(fileURLToPath(import.meta.url)), "..", "src", "index.ts");
+const entry = join(
+  dirname(fileURLToPath(import.meta.url)),
+  "..",
+  "..",
+  "src",
+  "index.ts",
+);
 
 async function runCli(args: string[]) {
   const proc = Bun.spawn(["bun", "run", entry, ...args], {
@@ -38,10 +44,16 @@ describe("cli", () => {
     expect(result.stdout).toBe("5");
   });
 
-  test("calc computes the modulo of two numbers", async () => {
-    const result = await runCli(["calc", "13", "%", "5"]);
-    expect(result.exitCode).toBe(0);
-    expect(result.stderr).toBe("");
-    expect(result.stdout).toBe("3");
+  test.each([
+    ["13", "5", "3"],
+    ["-13", "5", "-3"],
+    ["7.5", "2", "1.5"],
+  ])("calc computes %s modulo %s", async (left, right, expected) => {
+    const result = await runCli(["calc", left, "%", right]);
+    expect(result).toEqual({
+      exitCode: 0,
+      stderr: "",
+      stdout: expected,
+    });
   });
 });
