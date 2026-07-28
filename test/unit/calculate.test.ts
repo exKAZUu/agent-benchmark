@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { calculate } from "../src/cli";
+import { calculate } from "../../src/cli";
 
 describe("calculate", () => {
   test("adds", () => {
