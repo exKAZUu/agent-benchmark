@@ -11,15 +11,15 @@ const entry = join(
 );
 
 async function runCli(args: string[]) {
-  const process = Bun.spawn([Bun.argv[0], entry, ...args], {
+  const child = Bun.spawn([process.execPath, entry, ...args], {
     stdout: "pipe",
     stderr: "pipe",
   });
 
   const [stdout, stderr, exitCode] = await Promise.all([
-    new Response(process.stdout).text(),
-    new Response(process.stderr).text(),
-    process.exited,
+    new Response(child.stdout).text(),
+    new Response(child.stderr).text(),
+    child.exited,
   ]);
 
   return {
