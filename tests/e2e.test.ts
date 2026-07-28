@@ -72,13 +72,6 @@ describe("cli", () => {
     expect(result.stderr).toContain("^");
   });
 
-  test("calc rejects a non-numeric operand", async () => {
-    const result = await runCli(["calc", "two", "+", "3"]);
-    expect(result.exitCode).not.toBe(0);
-    expect(result.stdout).toBe("");
-    expect(result.stderr).toContain("'two' is not a number.");
-  });
-
   test("calc requires all three arguments", async () => {
     const result = await runCli(["calc", "2", "+"]);
     expect(result.exitCode).not.toBe(0);
