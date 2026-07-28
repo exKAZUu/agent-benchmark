@@ -13,7 +13,10 @@ function parseNumber(value: string): number {
 
 const program = new Command();
 
-program.name("agent-benchmark");
+program
+  .name("agent-benchmark")
+  .description("A benchmark for coding agents")
+  .showHelpAfterError();
 
 program
   .command("hello")
@@ -31,5 +34,9 @@ program
   .action((left: number, operator: Operator, right: number) => {
     console.log(calculate(left, operator, right));
   });
+
+program.action(() => {
+  program.help({ error: true });
+});
 
 program.parse();
