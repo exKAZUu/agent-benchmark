@@ -1,7 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { currentText } from "../../src/cli";
 
 const entry = join(
   dirname(fileURLToPath(import.meta.url)),
@@ -35,7 +34,7 @@ describe("agent-benchmark CLI", () => {
     const result = await runCli(["hello"]);
 
     expect(result).toEqual({
-      stdout: currentText,
+      stdout: "Hello, World!",
       stderr: "",
       exitCode: 0,
     });
