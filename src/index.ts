@@ -1,7 +1,5 @@
 import { Argument, Command, InvalidArgumentError } from "commander";
-import { calculate, currentText, type Operator } from "./cli";
-
-const operators: Operator[] = ["+", "-", "*", "/", "%"];
+import { calculate, currentText, operators, type Operator } from "./cli";
 
 function parseNumber(value: string): number {
   const parsed = Number(value);
@@ -26,7 +24,7 @@ program
   .command("calc")
   .description("Calculate a result from two numbers and an operator")
   .argument("<left>", "Left operand", parseNumber)
-  .addArgument(new Argument("<operator>", "Operator").choices(operators))
+  .addArgument(new Argument("<operator>", "Operator").choices([...operators]))
   .argument("<right>", "Right operand", parseNumber)
   .action((left: number, operator: Operator, right: number) => {
     console.log(calculate(left, operator, right));
