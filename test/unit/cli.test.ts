@@ -42,7 +42,7 @@ describe("agent-benchmark CLI", () => {
     expect(result.stdout).toContain("calc <left> <operator> <right>");
   });
 
-  test("prints the current text", async () => {
+  test("prints Hello, World!", async () => {
     const result = await runCli(["hello"]);
 
     expect(result).toEqual({
