@@ -13,7 +13,9 @@ function parseNumber(value: string): number {
 
 const program = new Command();
 
-program.name("agent-benchmark");
+program.name("agent-benchmark").action(() => {
+  program.help({ error: true });
+});
 
 program
   .command("hello")
