@@ -11,25 +11,31 @@ function parseNumber(value: string): number {
   return parsed;
 }
 
-const program = new Command();
+export function createProgram(): Command {
+  const program = new Command();
 
-program.name("agent-benchmark");
+  program.name("agent-benchmark");
 
-program
-  .command("hello")
-  .description("Print the current text")
-  .action(() => {
-    console.log(currentText);
-  });
+  program
+    .command("hello")
+    .description("Print the current text")
+    .action(() => {
+      console.log(currentText);
+    });
 
-program
-  .command("calc")
-  .description("Calculate a result from two numbers and an operator")
-  .argument("<left>", "Left operand", parseNumber)
-  .addArgument(new Argument("<operator>", "Operator").choices(operators))
-  .argument("<right>", "Right operand", parseNumber)
-  .action((left: number, operator: Operator, right: number) => {
-    console.log(calculate(left, operator, right));
-  });
+  program
+    .command("calc")
+    .description("Calculate a result from two numbers and an operator")
+    .argument("<left>", "Left operand", parseNumber)
+    .addArgument(new Argument("<operator>", "Operator").choices(operators))
+    .argument("<right>", "Right operand", parseNumber)
+    .action((left: number, operator: Operator, right: number) => {
+      console.log(calculate(left, operator, right));
+    });
 
-program.parse();
+  return program;
+}
+
+if (import.meta.main) {
+  createProgram().parse();
+}
