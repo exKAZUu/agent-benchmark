@@ -44,4 +44,48 @@ describe("cli", () => {
     expect(result.stderr).toBe("");
     expect(result.stdout).toBe("3");
   });
+
+  test("calc accepts negative operands instead of treating them as options", async () => {
+    const result = await runCli(["calc", "-13", "%", "5"]);
+    expect(result.exitCode).toBe(0);
+    expect(result.stderr).toBe("");
+    expect(result.stdout).toBe("-3");
+  });
+
+  test("calc rejects an unsupported operator", async () => {
+    const result = await runCli(["calc", "13", "^", "5"]);
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stdout).toBe("");
+    expect(result.stderr).toContain("'^' is invalid for argument 'operator'");
+    expect(result.stderr).toContain("+, -, *, /, %");
+  });
+
+  test("calc rejects a non-numeric operand", async () => {
+    const result = await runCli(["calc", "a", "+", "1"]);
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stdout).toBe("");
+    expect(result.stderr).toContain("'a' is not a number.");
+  });
+
+  test("calc reports a missing operand", async () => {
+    const result = await runCli(["calc", "1", "+"]);
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stdout).toBe("");
+    expect(result.stderr).toContain("missing required argument 'right'");
+  });
+
+  test("an unknown command fails with an error", async () => {
+    const result = await runCli(["bogus"]);
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stdout).toBe("");
+    expect(result.stderr).toContain("unknown command 'bogus'");
+  });
+
+  test("--help lists the available commands", async () => {
+    const result = await runCli(["--help"]);
+    expect(result.exitCode).toBe(0);
+    expect(result.stdout).toContain("Usage: agent-benchmark");
+    expect(result.stdout).toContain("hello");
+    expect(result.stdout).toContain("calc <left> <operator> <right>");
+  });
 });
