@@ -1,4 +1,4 @@
-export const currentText = "Hello via Bun!";
+export const currentText = "Hello, World!";
 
 export type Operator = "+" | "-" | "*" | "/" | "%";
 
