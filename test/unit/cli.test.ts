@@ -1,8 +1,14 @@
 import { describe, expect, test } from "bun:test";
-import { fileURLToPath } from "url";
 import { dirname, join } from "path";
+import { fileURLToPath } from "url";
 
-const entry = join(dirname(fileURLToPath(import.meta.url)), "..", "src", "index.ts");
+const entry = join(
+  dirname(fileURLToPath(import.meta.url)),
+  "..",
+  "..",
+  "src",
+  "index.ts",
+);
 
 async function runCli(args: string[]) {
   const proc = Bun.spawn(["bun", "run", entry, ...args], {
