@@ -1,8 +1,14 @@
 import { describe, expect, test } from "bun:test";
-import { fileURLToPath } from "url";
 import { dirname, join } from "path";
+import { fileURLToPath } from "url";
 
-const entry = join(dirname(fileURLToPath(import.meta.url)), "..", "src", "index.ts");
+const entry = join(
+  dirname(fileURLToPath(import.meta.url)),
+  "..",
+  "..",
+  "src",
+  "index.ts",
+);
 
 async function runCli(args: string[]) {
   const proc = Bun.spawn(["bun", "run", entry, ...args], {
@@ -17,31 +23,31 @@ async function runCli(args: string[]) {
   ]);
 
   return {
-    stdout: stdout.trim(),
+    stdout,
     stderr: stderr.trim(),
     exitCode,
   };
 }
 
 describe("cli", () => {
-  test("hello prints the current text", async () => {
+  test("hello prints Hello, World!", async () => {
     const result = await runCli(["hello"]);
     expect(result.exitCode).toBe(0);
     expect(result.stderr).toBe("");
-    expect(result.stdout).toBe("Hello, World!");
+    expect(result.stdout).toBe("Hello, World!\n");
   });
 
   test("calc prints only the number result", async () => {
     const result = await runCli(["calc", "2", "+", "3"]);
     expect(result.exitCode).toBe(0);
     expect(result.stderr).toBe("");
-    expect(result.stdout).toBe("5");
+    expect(result.stdout.trim()).toBe("5");
   });
 
   test("calc computes the modulo of two numbers", async () => {
     const result = await runCli(["calc", "13", "%", "5"]);
     expect(result.exitCode).toBe(0);
     expect(result.stderr).toBe("");
-    expect(result.stdout).toBe("3");
+    expect(result.stdout.trim()).toBe("3");
   });
 });
