@@ -44,4 +44,23 @@ describe("cli", () => {
     expect(result.stderr).toBe("");
     expect(result.stdout).toBe("3");
   });
+
+  test("calc fails with invalid operator", async () => {
+    const result = await runCli(["calc", "2", "^", "3"]);
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stderr).toContain("Allowed choices are +, -, *, /, %.");
+  });
+
+  test("calc fails with invalid number", async () => {
+    const result = await runCli(["calc", "abc", "+", "3"]);
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stderr).toContain("is not a number");
+  });
+
+  test("prints help information", async () => {
+    const result = await runCli(["--help"]);
+    expect(result.exitCode).toBe(0);
+    expect(result.stdout).toContain("hello");
+    expect(result.stdout).toContain("calc");
+  });
 });
