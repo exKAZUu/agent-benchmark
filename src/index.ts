@@ -1,4 +1,4 @@
-import { Argument, Command, InvalidArgumentError } from "commander";
+import { Argument, Command, CommanderError, InvalidArgumentError } from "commander";
 import { calculate, currentText, type Operator } from "./cli";
 
 const operators: Operator[] = ["+", "-", "*", "/", "%"];
@@ -14,6 +14,11 @@ function parseNumber(value: string): number {
 const program = new Command();
 
 program.name("agent-benchmark");
+
+// Commander exits via `process.exit()` right after writing help or an error message, which can
+// discard output that is still buffered when stdout/stderr are pipes. Set the exit code instead so
+// the process ends only once its output has been flushed.
+program.exitOverride();
 
 program
   .command("hello")
@@ -32,4 +37,9 @@ program
     console.log(calculate(left, operator, right));
   });
 
-program.parse();
+try {
+  program.parse();
+} catch (error) {
+  if (!(error instanceof CommanderError)) throw error;
+  process.exitCode = error.exitCode;
+}
