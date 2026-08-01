@@ -15,6 +15,10 @@ const program = new Command();
 
 program.name("agent-benchmark");
 
+program.action(() => {
+  console.log(currentText);
+});
+
 program
   .command("hello")
   .description("Print the current text")
