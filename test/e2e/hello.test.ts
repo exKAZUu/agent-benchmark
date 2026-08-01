@@ -6,7 +6,6 @@ const entry = join(
   dirname(fileURLToPath(import.meta.url)),
   "..",
   "..",
-  "..",
   "src",
   "index.ts",
 );
