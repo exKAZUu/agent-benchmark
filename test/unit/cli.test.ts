@@ -70,9 +70,8 @@ describe("cli", () => {
     const result = await runCli(["calc", "2", "^", "3"]);
     expect(result.exitCode).toBe(1);
     expect(result.stdout).toBe("");
-    expect(result.stderr).toContain(
-      "error: argument 'operator' must be one of '+', '-', '*', '/', '%'",
-    );
+    expect(result.stderr).toContain("value '^' is invalid");
+    expect(result.stderr).toContain("Allowed choices are +, -, *, /, %");
     expect(result.stderr).toContain(
       "Usage: agent-benchmark calc [options] <left> <operator> <right>",
     );
@@ -82,7 +81,7 @@ describe("cli", () => {
     const result = await runCli(["calc", "two", "+", "3"]);
     expect(result.exitCode).toBe(1);
     expect(result.stdout).toBe("");
-    expect(result.stderr).toContain("error: invalid value 'two' for '<left>'");
+    expect(result.stderr).toContain("value 'two' is invalid");
     expect(result.stderr).toContain("'two' is not a number");
   });
 });
