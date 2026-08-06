@@ -30,6 +30,14 @@ async function runCli(args: string[]) {
 }
 
 describe("cli", () => {
+  // The README documents `bun run src/index.ts` as the way to run the project.
+  test("the documented command prints Hello, World!", async () => {
+    const result = await runCli([]);
+    expect(result.stdout).toBe("Hello, World!");
+    expect(result.stderr).toBe("");
+    expect(result.exitCode).toBe(0);
+  });
+
   test("hello prints Hello, World!", async () => {
     const result = await runCli(["hello"]);
     expect(result.stdout).toBe("Hello, World!");
@@ -73,8 +81,7 @@ describe("cli", () => {
     const result = await runCli(["frobnicate"]);
     expect(result.exitCode).toBe(1);
     expect(result.stdout).toBe("");
-    expect(result.stderr).toStartWith("error:");
-    expect(result.stderr).toContain("frobnicate");
+    expect(result.stderr).toContain("unknown command 'frobnicate'");
   });
 
   test("--help documents both subcommands", async () => {

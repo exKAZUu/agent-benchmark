@@ -30,4 +30,8 @@ program
     console.log(calculate(left, operator, right));
   });
 
-program.parse();
+// The README documents `bun run src/index.ts` as the way to run the project, so a
+// bare invocation greets. `hello` is not registered as commander's default command
+// because that would swallow unknown commands as its arguments.
+const args = process.argv.slice(2);
+program.parse(args.length > 0 ? args : ["hello"], { from: "user" });
