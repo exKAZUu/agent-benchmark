@@ -16,7 +16,7 @@ const program = new Command();
 program.name("agent-benchmark");
 
 program
-  .command("hello")
+  .command("hello", { isDefault: true })
   .description("Print the current text")
   .action(() => {
     console.log(currentText);
