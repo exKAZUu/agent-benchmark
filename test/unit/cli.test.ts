@@ -2,7 +2,13 @@ import { describe, expect, test } from "bun:test";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 
-const entry = join(dirname(fileURLToPath(import.meta.url)), "..", "src", "index.ts");
+const entry = join(
+  dirname(fileURLToPath(import.meta.url)),
+  "..",
+  "..",
+  "src",
+  "index.ts",
+);
 
 async function runCli(args: string[]) {
   const proc = Bun.spawn(["bun", "run", entry, ...args], {
@@ -24,11 +30,11 @@ async function runCli(args: string[]) {
 }
 
 describe("cli", () => {
-  test("hello prints the current text", async () => {
-    const result = await runCli(["hello"]);
-    expect(result.exitCode).toBe(0);
-    expect(result.stderr).toBe("");
+  test("the documented command prints Hello, World!", async () => {
+    const result = await runCli([]);
     expect(result.stdout).toBe("Hello, World!");
+    expect(result.stderr).toBe("");
+    expect(result.exitCode).toBe(0);
   });
 
   test("calc prints only the number result", async () => {
