@@ -44,4 +44,18 @@ describe("cli", () => {
     expect(result.stderr).toBe("");
     expect(result.stdout).toBe("3");
   });
+
+  test("displays help information with commander", async () => {
+    const result = await runCli(["--help"]);
+    expect(result.exitCode).toBe(0);
+    expect(result.stdout).toContain("Usage: agent-benchmark");
+    expect(result.stdout).toContain("hello");
+    expect(result.stdout).toContain("calc");
+  });
+
+  test("validates invalid argument for calc command", async () => {
+    const result = await runCli(["calc", "abc", "+", "3"]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("invalid");
+  });
 });
