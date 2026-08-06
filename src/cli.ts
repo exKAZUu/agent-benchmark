@@ -1,4 +1,4 @@
-export const currentText = "Hello, World!";
+export const currentText = "Hello via Bun!";
 
 export const operators = ["+", "-", "*", "/", "%"] as const;
 

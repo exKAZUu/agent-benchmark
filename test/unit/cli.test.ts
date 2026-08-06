@@ -24,11 +24,13 @@ async function runCli(args: string[]) {
 }
 
 describe("cli", () => {
-  test("hello prints the current text", async () => {
+  test('hello prints "Hello, World!" instead of "Hello via Bun!"', async () => {
     const result = await runCli(["hello"]);
-    expect(result.exitCode).toBe(0);
-    expect(result.stderr).toBe("");
-    expect(result.stdout).toBe("Hello, World!");
+    expect(result).toEqual({
+      exitCode: 0,
+      stderr: "",
+      stdout: "Hello, World!",
+    });
   });
 
   test("calc prints only the number result", async () => {
