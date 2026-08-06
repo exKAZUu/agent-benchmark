@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
+import { calculate } from "../../src/cli";
 
 const entry = join(
   dirname(fileURLToPath(import.meta.url)),
@@ -28,6 +29,14 @@ async function runCli(args: string[]) {
     exitCode,
   };
 }
+
+describe("calculate", () => {
+  test("computes the remainder using modulo operator", () => {
+    expect(calculate(13, "%", 5)).toBe(3);
+    expect(calculate(-13, "%", 5)).toBe(-3);
+    expect(calculate(7.5, "%", 2)).toBe(1.5);
+  });
+});
 
 describe("agent-benchmark CLI", () => {
   test("prints the current text", async () => {
