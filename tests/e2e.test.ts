@@ -58,4 +58,18 @@ describe("cli", () => {
     expect(result.stdout).toBe("");
     expect(result.stderr).toContain("^");
   });
+
+  test("prints help information with --help", async () => {
+    const result = await runCli(["--help"]);
+    expect(result.exitCode).toBe(0);
+    expect(result.stdout).toContain("Usage: agent-benchmark");
+    expect(result.stdout).toContain("hello");
+    expect(result.stdout).toContain("calc");
+  });
+
+  test("calc rejects non-numeric operands", async () => {
+    const result = await runCli(["calc", "abc", "+", "3"]);
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stderr).toContain("'abc' is not a number");
+  });
 });
