@@ -1,4 +1,5 @@
 import { Argument, Command, InvalidArgumentError } from "commander";
+import packageJson from "../package.json" with { type: "json" };
 import { calculate, currentText, type Operator } from "./cli";
 
 const operators: Operator[] = ["+", "-", "*", "/", "%"];
@@ -13,7 +14,10 @@ function parseNumber(value: string): number {
 
 const program = new Command();
 
-program.name("agent-benchmark");
+program
+  .name(packageJson.name)
+  .description(packageJson.description)
+  .version(packageJson.version);
 
 program
   .command("hello")

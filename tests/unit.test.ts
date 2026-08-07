@@ -1,5 +1,11 @@
 import { describe, expect, test } from "bun:test";
-import { calculate } from "../src/cli";
+import { calculate, currentText } from "../src/cli";
+
+describe("currentText", () => {
+  test("is Hello, World!", () => {
+    expect(currentText).toBe("Hello, World!");
+  });
+});
 
 describe("calculate", () => {
   test("adds", () => {
@@ -21,6 +27,11 @@ describe("calculate", () => {
   test("computes the remainder", () => {
     expect(calculate(13, "%", 5)).toBe(3);
     expect(calculate(-13, "%", 5)).toBe(-3);
+    expect(calculate(13, "%", -5)).toBe(3);
     expect(calculate(7.5, "%", 2)).toBe(1.5);
+  });
+
+  test("returns NaN for a remainder by zero", () => {
+    expect(calculate(13, "%", 0)).toBeNaN();
   });
 });
