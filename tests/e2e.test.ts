@@ -44,4 +44,11 @@ describe("cli", () => {
     expect(result.stderr).toBe("");
     expect(result.stdout).toBe("3");
   });
+
+  test("calc rejects an unsupported operator", async () => {
+    const result = await runCli(["calc", "5", "^", "2"]);
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stdout).toBe("");
+    expect(result.stderr).toContain("+, -, *, /, %");
+  });
 });
