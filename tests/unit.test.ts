@@ -1,5 +1,11 @@
 import { describe, expect, test } from "bun:test";
-import { calculate } from "../src/cli";
+import { calculate, currentText } from "../src/cli";
+
+describe("currentText", () => {
+  test("is Hello, World!", () => {
+    expect(currentText).toBe("Hello, World!");
+  });
+});
 
 describe("calculate", () => {
   test("adds", () => {
