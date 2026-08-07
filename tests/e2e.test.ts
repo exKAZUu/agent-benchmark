@@ -38,10 +38,16 @@ describe("cli", () => {
     expect(result.stdout).toBe("5");
   });
 
-  test("calc computes the modulo of two numbers", async () => {
-    const result = await runCli(["calc", "13", "%", "5"]);
-    expect(result.exitCode).toBe(0);
-    expect(result.stderr).toBe("");
-    expect(result.stdout).toBe("3");
-  });
+  for (const [left, right, expected] of [
+    ["13", "5", "3"],
+    ["-13", "5", "-3"],
+    ["7.5", "2", "1.5"],
+  ] as const) {
+    test(`calc computes ${left} modulo ${right}`, async () => {
+      const result = await runCli(["calc", left, "%", right]);
+      expect(result.exitCode).toBe(0);
+      expect(result.stderr).toBe("");
+      expect(result.stdout).toBe(expected);
+    });
+  }
 });
