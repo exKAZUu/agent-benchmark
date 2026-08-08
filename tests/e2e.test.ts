@@ -44,4 +44,18 @@ describe("cli", () => {
     expect(result.stderr).toBe("");
     expect(result.stdout).toBe("3");
   });
+
+  test("calc keeps the sign of the left operand for modulo", async () => {
+    const result = await runCli(["calc", "-13", "%", "5"]);
+    expect(result.exitCode).toBe(0);
+    expect(result.stderr).toBe("");
+    expect(result.stdout).toBe("-3");
+  });
+
+  test("calc rejects an unsupported operator", async () => {
+    const result = await runCli(["calc", "2", "^", "3"]);
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stdout).toBe("");
+    expect(result.stderr).toContain("'^'");
+  });
 });
