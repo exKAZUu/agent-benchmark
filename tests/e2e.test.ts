@@ -39,9 +39,17 @@ describe("cli", () => {
   });
 
   test("calc computes the modulo of two numbers", async () => {
-    const result = await runCli(["calc", "13", "%", "5"]);
-    expect(result.exitCode).toBe(0);
-    expect(result.stderr).toBe("");
-    expect(result.stdout).toBe("3");
+    const cases = [
+      { left: "13", right: "5", expected: "3" },
+      { left: "-13", right: "5", expected: "-3" },
+      { left: "7.5", right: "2", expected: "1.5" },
+    ];
+
+    for (const { left, right, expected } of cases) {
+      const result = await runCli(["calc", left, "%", right]);
+      expect(result.exitCode).toBe(0);
+      expect(result.stderr).toBe("");
+      expect(result.stdout).toBe(expected);
+    }
   });
 });
