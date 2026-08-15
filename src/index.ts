@@ -5,7 +5,7 @@ const operators: Operator[] = ["+", "-", "*", "/", "%"];
 
 function parseNumber(value: string): number {
   const parsed = Number(value);
-  if (!Number.isFinite(parsed)) {
+  if (value.trim() === "" || !Number.isFinite(parsed)) {
     throw new InvalidArgumentError(`'${value}' is not a number.`);
   }
   return parsed;
