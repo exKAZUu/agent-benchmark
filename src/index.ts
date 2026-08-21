@@ -33,3 +33,7 @@ program
   });
 
 program.parse();
+
+if (program.args.length === 0) {
+  program.help({ error: true });
+}
