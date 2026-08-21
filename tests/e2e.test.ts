@@ -24,6 +24,14 @@ async function runCli(args: string[]) {
 }
 
 describe("cli", () => {
+  test("requires a command", async () => {
+    const result = await runCli([]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stdout).toBe("");
+    expect(result.stderr).toContain("error: a command is required");
+    expect(result.stderr).toContain("Usage: agent-benchmark");
+  });
+
   test("hello prints the current text", async () => {
     const result = await runCli(["hello"]);
     expect(result.exitCode).toBe(0);
@@ -43,5 +51,12 @@ describe("cli", () => {
     expect(result.exitCode).toBe(0);
     expect(result.stderr).toBe("");
     expect(result.stdout).toBe("3");
+  });
+
+  test("calc rejects a non-numeric operand", async () => {
+    const result = await runCli(["calc", "two", "+", "3"]);
+    expect(result.exitCode).toBe(1);
+    expect(result.stdout).toBe("");
+    expect(result.stderr).toContain("'two' is not a number");
   });
 });

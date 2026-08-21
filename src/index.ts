@@ -11,9 +11,12 @@ function parseNumber(value: string): number {
   return parsed;
 }
 
-const program = new Command();
-
-program.name("agent-benchmark");
+const program = new Command()
+  .name("agent-benchmark")
+  .showHelpAfterError()
+  .action(() => {
+    program.error("error: a command is required");
+  });
 
 program
   .command("hello")
