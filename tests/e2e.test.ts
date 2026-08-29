@@ -24,7 +24,7 @@ async function runCli(args: string[]) {
 }
 
 describe("cli", () => {
-  test("hello prints the current text", async () => {
+  test('hello prints "Hello, World!"', async () => {
     const result = await runCli(["hello"]);
     expect(result.exitCode).toBe(0);
     expect(result.stderr).toBe("");
